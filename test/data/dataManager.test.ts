@@ -14,20 +14,7 @@ describe("Data manager", () => {
     dataManagerUnderTest = new DataManager();
   });
 
-  it("has data cache", () => {
-    (dataManagerUnderTest as any).data.should.be.instanceOf(Array);
-  });
-
-  it("can add data into cache", () => {
-    const expectedLength = 3;
-    for (let i = 0; i < expectedLength; i++) {
-      dataManagerUnderTest.addToCache({});
-    }
-
-    (dataManagerUnderTest as any).data.should.have.length(expectedLength);
-  });
-
-  it("finds object by matcher", () => {
+  it("finds object in cache by matcher", () => {
     const objectShape = {
       Name: "Object To Find",
     };
