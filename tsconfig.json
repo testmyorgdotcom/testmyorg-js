@@ -4,12 +4,12 @@
     "outDir": "./out",
     "importHelpers": true,
     "skipLibCheck": true,
-    "rootDir": "./src",
-    "baseUrl": "./src",
+    "rootDir": ".",
+    "baseUrl": ".",
     "noUnusedLocals": false,
     "paths": {
-      "@src/*": ["*"],
-      "@lib/*": ["lib/*"]
+      "@src/*": ["src/*"],
+      "@test/*": ["test/*"]
     }
   },
   "include": [
