@@ -1,8 +1,18 @@
-import { find, whereEq } from "ramda";
+import { curry, find } from "ramda";
 import { Record } from "jsforce";
-import { RecordShape } from "./recordMatcher";
+import { IsRecord, Matcher } from "./recordMatcher";
 
-export class DataManager {
+export interface ITestDataManager {
+  cacheExistingShape(itemToStore: IsRecord): void;
+  findObject(objectShape: Matcher): Record;
+  ensureObject(objectShape: Matcher & IsRecord): Promise<Record>;
+}
+
+const matchByShape = curry((shape: Matcher, record: Record) =>
+  shape.match(record)
+);
+
+export class TestDataManager implements ITestDataManager {
   private data: Record[];
   private salesforceConnection;
 
@@ -11,20 +21,18 @@ export class DataManager {
     this.salesforceConnection = salesforceConnection;
   }
 
-  public cacheShape(itemToStore: RecordShape): void {
+  public cacheExistingShape(itemToStore: IsRecord): void {
     if (!itemToStore.hasId()) {
       throw new Error("Id is missing from record");
     }
     this.addToCache(itemToStore.record());
   }
 
-  public findObject(objectShape: RecordShape): Record {
-    return find((record) => {
-      return objectShape.match(record);
-    }, this.data);
+  public findObject(objectShape: Matcher): Record {
+    return find(matchByShape(objectShape), this.data);
   }
 
-  public async ensureObject(objectShape: RecordShape): Promise<Record> {
+  public async ensureObject(objectShape: Matcher & IsRecord): Promise<Record> {
     let result = this.findObject(objectShape);
     if (!result) {
       const record = objectShape.record();

@@ -1,12 +1,24 @@
 import { Record, SalesforceId } from "jsforce";
 import { whereEq } from "ramda";
+import { SinonMatcher } from "sinon";
+
+export interface Matcher {
+  match(any): Boolean;
+}
+
+export interface IsRecord {
+  hasId(): Boolean;
+  record(): Record;
+}
+
+export interface IRecordShape extends Matcher, IsRecord {}
 
 export interface RecordShapeConfig {
   type?: String;
   [fieldName: string]: any;
 }
 
-export class RecordShape {
+export class RecordShape implements IRecordShape {
   private readonly type: String;
   private readonly fields: { [fieldName: string]: any };
 

@@ -3,6 +3,7 @@ import { DataManager, RecordShape } from "@data";
 import { whereEq } from "ramda";
 import { createSandbox } from "sinon";
 import { Record } from "jsforce";
+import { ITestDataManager } from "@src/data/dataManager";
 
 chai.should();
 
@@ -10,7 +11,7 @@ const { expect } = chai;
 
 describe("Data manager", () => {
   const sandbox = createSandbox();
-  let dataManagerUnderTest: DataManager;
+  let dataManagerUnderTest: ITestDataManager;
   let salesforceConnection: any;
 
   beforeEach(() => {
@@ -38,7 +39,7 @@ describe("Data manager", () => {
       anotherField: "some value",
     });
 
-    dataManagerUnderTest.cacheShape(expectedObject);
+    dataManagerUnderTest.cacheExistingShape(expectedObject);
 
     dataManagerUnderTest
       .findObject(objectShape)
@@ -99,7 +100,7 @@ describe("Data manager", () => {
     };
     const objectShape = new RecordShape(shapeConfig);
     const expectedObject: Record = objectShape.record();
-    dataManagerUnderTest.cacheShape(objectShape);
+    dataManagerUnderTest.cacheExistingShape(objectShape);
 
     (
       await dataManagerUnderTest.ensureObject(objectShape)
@@ -109,8 +110,8 @@ describe("Data manager", () => {
   });
 
   it("fails addition to cache if Id is missing", () => {
-    expect(() => dataManagerUnderTest.cacheShape(new RecordShape({}))).to.throw(
-      "Id is missing from record"
-    );
+    expect(() =>
+      dataManagerUnderTest.cacheExistingShape(new RecordShape({}))
+    ).to.throw("Id is missing from record");
   });
 });
