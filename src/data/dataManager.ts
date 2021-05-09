@@ -11,11 +11,11 @@ export class DataManager {
     this.salesforceConnection = salesforceConnection;
   }
 
-  public cache(itemToStore: Record): void {
-    if (!itemToStore.Id) {
+  public cacheShape(itemToStore: RecordShape): void {
+    if (!itemToStore.hasId()) {
       throw new Error("Id is missing from record");
     }
-    this.addToCache(itemToStore);
+    this.addToCache(itemToStore.record());
   }
 
   public findObject(objectShape: RecordShape): Record {

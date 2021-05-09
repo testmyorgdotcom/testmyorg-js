@@ -26,23 +26,23 @@ describe("Data manager", () => {
 
   it("finds object in cache by matcher", () => {
     const shapeConfig = {
-      Name: "Object To Find",
-    };
-    const objectShape: RecordShape = new RecordShape(shapeConfig);
-    const expectedObject: Record = {
-      attributes: {
-        type: "Account",
-      },
+      type: "Account",
       Id: "123",
-      ...shapeConfig,
+      Name: "Object To Find",
       anotherField: "some value",
     };
+    const objectShape: RecordShape = new RecordShape(shapeConfig);
 
-    dataManagerUnderTest.cache(expectedObject);
+    const expectedObject: Record = new RecordShape({
+      ...shapeConfig,
+      anotherField: "some value",
+    });
+
+    dataManagerUnderTest.cacheShape(expectedObject);
 
     dataManagerUnderTest
       .findObject(objectShape)
-      .should.be.ok.and.equal(expectedObject);
+      .should.be.ok.and.deep.equal(expectedObject.record());
   });
 
   it("returns undefined when object not found", () => {
@@ -92,29 +92,25 @@ describe("Data manager", () => {
 
   it("inserts record only if none was found", async () => {
     const shapeConfig = {
-      Name: "Object To Find",
-    };
-    const objectShape = new RecordShape(shapeConfig);
-    const expectedObject: Record = {
-      attributes: {
-        type: "Account",
-      },
+      type: "Account",
       Id: "123",
-      ...shapeConfig,
+      Name: "Object To Find",
       anotherField: "some value",
     };
-    dataManagerUnderTest.cache(expectedObject);
+    const objectShape = new RecordShape(shapeConfig);
+    const expectedObject: Record = objectShape.record();
+    dataManagerUnderTest.cacheShape(objectShape);
 
     (
       await dataManagerUnderTest.ensureObject(objectShape)
-    ).should.be.ok.and.equal(expectedObject);
+    ).should.be.ok.and.deep.equal(expectedObject);
 
     salesforceConnection.insert.should.not.be.called;
   });
 
   it("fails addition to cache if Id is missing", () => {
-    expect(() =>
-      dataManagerUnderTest.cache({ attributes: { type: "Account" } })
-    ).to.throw("Id is missing from record");
+    expect(() => dataManagerUnderTest.cacheShape(new RecordShape({}))).to.throw(
+      "Id is missing from record"
+    );
   });
 });

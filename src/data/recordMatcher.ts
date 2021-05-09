@@ -1,4 +1,4 @@
-import { Record } from "jsforce";
+import { Record, SalesforceId } from "jsforce";
 import { whereEq } from "ramda";
 
 export interface RecordShapeConfig {
@@ -14,6 +14,10 @@ export class RecordShape {
     const { type, ...fields } = config;
     this.type = type;
     this.fields = fields;
+  }
+
+  public hasId() {
+    return Boolean(this.fields.Id);
   }
 
   public match(record: Record): boolean {
