@@ -112,18 +112,6 @@ describe("Data manager", () => {
     salesforceConnection.insert.should.not.be.called;
   });
 
-  it("fails addition to cache if attributes is missing", () => {
-    expect(() => dataManagerUnderTest.cache({ Id: "123" })).to.throw(
-      "SObject type is missing from record attributes"
-    );
-  });
-
-  it("fails addition to cache if attributes.type is missing", () => {
-    expect(() =>
-      dataManagerUnderTest.cache({ Id: "123", attributes: {} })
-    ).to.throw("SObject type is missing from record attributes");
-  });
-
   it("fails addition to cache if Id is missing", () => {
     expect(() =>
       dataManagerUnderTest.cache({ attributes: { type: "Account" } })

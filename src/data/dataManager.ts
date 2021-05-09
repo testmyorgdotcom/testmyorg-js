@@ -12,9 +12,6 @@ export class DataManager {
   }
 
   public cache(itemToStore: Record): void {
-    if (!itemToStore.attributes || !itemToStore.attributes.type) {
-      throw new Error("SObject type is missing from record attributes");
-    }
     if (!itemToStore.Id) {
       throw new Error("Id is missing from record");
     }
