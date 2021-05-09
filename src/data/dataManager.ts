@@ -1,5 +1,6 @@
 import { find, whereEq } from "ramda";
-import { SObject, Record } from "jsforce";
+import { Record } from "jsforce";
+import { RecordShape } from "./recordMatcher";
 
 export class DataManager {
   private data: Record[];
@@ -20,20 +21,23 @@ export class DataManager {
     this.addToCache(itemToStore);
   }
 
-  public findObject(objectShape: object): Record {
-    return find(whereEq(objectShape), this.data);
+  public findObject(objectShape: RecordShape): Record {
+    return find((record) => {
+      return objectShape.match(record);
+    }, this.data);
   }
 
-  public async ensureObject(objectShape: object): Promise<Record> {
+  public async ensureObject(objectShape: RecordShape): Promise<Record> {
     let result = this.findObject(objectShape);
     if (!result) {
-      const recordId = await this.salesforceConnection.insert(objectShape);
-      const objectToStore = {
+      const record = objectShape.record();
+      const recordId = await this.salesforceConnection.insert(record);
+      const savedObject: Record = {
         Id: recordId,
-        ...objectShape,
+        ...record,
       };
-      this.addToCache(objectToStore);
-      result = this.findObject(objectShape);
+      this.addToCache(savedObject);
+      result = savedObject;
     }
     return result;
   }
