@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "./out",
+    "importHelpers": true,
+    "skipLibCheck": true,
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "noUnusedLocals": false,
+    "paths": {
+      "@src/*": ["*"],
+      "@lib/*": ["lib/*"]
+    }
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
