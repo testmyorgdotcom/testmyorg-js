@@ -1,6 +1,9 @@
 import { chai } from "../chai-extra";
 import { DataManager } from "@data";
 import { whereEq } from "ramda";
+import { createSandbox } from "sinon";
+import { Record } from "jsforce";
+import { should } from "chai";
 
 const { todo } = test;
 chai.should();
@@ -8,21 +11,35 @@ chai.should();
 const { expect } = chai;
 
 describe("Data manager", () => {
+  const sandbox = createSandbox();
   let dataManagerUnderTest: DataManager;
+  let salesforceConnection: any;
 
   beforeEach(() => {
-    dataManagerUnderTest = new DataManager();
+    salesforceConnection = {
+      insert: sandbox.stub().resolves("recordId"),
+    };
+    dataManagerUnderTest = new DataManager(salesforceConnection);
+  });
+
+  afterEach(() => {
+    sandbox.restore();
   });
 
   it("finds object in cache by matcher", () => {
     const objectShape = {
       Name: "Object To Find",
     };
-    const expectedObject = {
+    const expectedObject: Record = {
+      attributes: {
+        type: "Account",
+      },
+      Id: "123",
       ...objectShape,
       anotherField: "some value",
     };
-    dataManagerUnderTest.addToCache(expectedObject);
+
+    dataManagerUnderTest.cache(expectedObject);
 
     dataManagerUnderTest
       .findObject(objectShape)
@@ -37,29 +54,75 @@ describe("Data manager", () => {
     expect(dataManagerUnderTest.findObject(objectShape)).to.be.undefined;
   });
 
-  it("creates object if not exists with a similar shape", () => {
+  it("creates object if not exists with a similar shape", async () => {
     const objectShape = {
       Name: "Object To Find",
     };
 
-    const actualObject = dataManagerUnderTest.ensureObject(objectShape);
+    const actualObject = await dataManagerUnderTest.ensureObject(objectShape);
     whereEq(objectShape, actualObject).should.be.true;
   });
 
-  it("stores created object in cache", () => {
+  it("stores created object in cache", async () => {
     const objectShape = {
       Name: "Object To Find",
     };
 
-    const expectedObject = dataManagerUnderTest.ensureObject(objectShape);
+    const expectedObject = await dataManagerUnderTest.ensureObject(objectShape);
     expect(dataManagerUnderTest.findObject(objectShape)).to.be.ok.and.equal(
       expectedObject
     );
   });
 
-  todo("creates object in Salesforce");
-  todo("not yet supported field values shapes");
-  todo("add data to cache if with id and type");
-  todo("fail add if id is missing");
-  todo("fail add if type is missing");
+  it("creates object in Salesforce", async () => {
+    const objectShape = {
+      Name: "Object To Find",
+    };
+
+    const ensuredRecord = await dataManagerUnderTest.ensureObject(objectShape);
+    const foundRecord = dataManagerUnderTest.findObject(objectShape);
+
+    salesforceConnection.insert.should.be.calledWith(objectShape);
+    ensuredRecord.should.have.property("Id");
+    foundRecord.should.have.property("Id");
+  });
+
+  it("inserts record only if none was found", async () => {
+    const objectShape = {
+      Name: "Object To Find",
+    };
+    const expectedObject: Record = {
+      attributes: {
+        type: "Account",
+      },
+      Id: "123",
+      ...objectShape,
+      anotherField: "some value",
+    };
+    dataManagerUnderTest.cache(expectedObject);
+
+    (
+      await dataManagerUnderTest.ensureObject(objectShape)
+    ).should.be.ok.and.equal(expectedObject);
+
+    salesforceConnection.insert.should.not.be.called;
+  });
+
+  it("fails addition to cache if attributes is missing", () => {
+    expect(() => dataManagerUnderTest.cache({ Id: "123" })).to.throw(
+      "SObject type is missing from record attributes"
+    );
+  });
+
+  it("fails addition to cache if attributes.type is missing", () => {
+    expect(() =>
+      dataManagerUnderTest.cache({ Id: "123", attributes: {} })
+    ).to.throw("SObject type is missing from record attributes");
+  });
+
+  it("fails addition to cache if Id is missing", () => {
+    expect(() =>
+      dataManagerUnderTest.cache({ attributes: { type: "Account" } })
+    ).to.throw("Id is missing from record");
+  });
 });
