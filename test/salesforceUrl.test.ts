@@ -1,12 +1,7 @@
 import { chai } from "./chai-extra";
-import { DataManager, RecordShape } from "@data";
-import { whereEq } from "ramda";
-import { createSandbox } from "sinon";
 import { SalesforceURL } from "@src/salesforceUrl";
 
 chai.should();
-
-const { todo } = test;
 
 describe("Salesforce URL", () => {
   const stringUrlUnderTest =
