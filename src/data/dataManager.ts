@@ -1,8 +1,9 @@
 import { curry, find } from "ramda";
 import { Record } from "jsforce";
-import { IsRecord, Matcher } from "./recordMatcher";
+import { IsRecord, Matcher, RecordShape } from "./recordMatcher";
 
 export interface ITestDataManager {
+  findObjects(objectShape: RecordShape);
   cacheExistingShape(itemToStore: IsRecord): void;
   findObject(objectShape: Matcher): Record;
   ensureObject(objectShape: Matcher & IsRecord): Promise<Record>;
@@ -19,6 +20,10 @@ export class TestDataManager implements ITestDataManager {
   constructor(salesforceConnection: object) {
     this.data = [];
     this.salesforceConnection = salesforceConnection;
+  }
+
+  public findObjects(objectShape: RecordShape): Record[] {
+    return this.data.filter(matchByShape(objectShape));
   }
 
   public cacheExistingShape(itemToStore: IsRecord): void {

@@ -46,6 +46,40 @@ describe("Data manager", () => {
       .should.be.ok.and.deep.equal(expectedObject.record());
   });
 
+  it("finds list of objects in cache by matcher", () => {
+    const shapeConfig = {
+      type: "Account",
+      Name: "Object To Find",
+      anotherField: "some value",
+    };
+    const objectShape: RecordShape = new RecordShape(shapeConfig);
+
+    const expectedObject1: Record = new RecordShape({
+      Id: "123",
+      ...shapeConfig,
+    });
+    const expectedObject2: Record = new RecordShape({
+      Id: "456",
+      ...shapeConfig,
+    });
+    const unexpectedObject: Record = new RecordShape({
+      Id: "789",
+      ...shapeConfig,
+      Name: "Unknown object",
+    });
+
+    dataManagerUnderTest.cacheExistingShape(expectedObject1);
+    dataManagerUnderTest.cacheExistingShape(expectedObject2);
+    dataManagerUnderTest.cacheExistingShape(unexpectedObject);
+
+    dataManagerUnderTest
+      .findObjects(objectShape)
+      .should.be.ok.and.deep.include.members([
+        expectedObject1.record(),
+        expectedObject2.record(),
+      ]);
+  });
+
   it("returns undefined when object not found", () => {
     const objectShape = new RecordShape({
       Name: "Object To Find",
