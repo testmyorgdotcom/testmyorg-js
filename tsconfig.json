@@ -5,11 +5,11 @@
     "importHelpers": true,
     "skipLibCheck": true,
     "rootDir": ".",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "noUnusedLocals": false,
     "paths": {
-      "@src/*": ["src/*"],
-      "@test/*": ["test/*"]
+      "@src/*": ["*"],
+      "@data": ["data"]
     }
   },
   "include": [
