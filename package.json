@@ -15,7 +15,8 @@
   },
   "_moduleAliases": {
     "@src": "out",
-    "@data": "out/data"
+    "@data": "out/data",
+    "@persona": "out/persona"
   },
   "dependencies": {
     "@cucumber/cucumber": "^7.0.0",
