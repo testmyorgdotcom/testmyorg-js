@@ -1,6 +1,5 @@
 import { Record, SalesforceId } from "jsforce";
 import { whereEq } from "ramda";
-import { SinonMatcher } from "sinon";
 
 export interface Matcher {
   match(any): Boolean;

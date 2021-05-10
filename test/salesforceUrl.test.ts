@@ -1,5 +1,5 @@
 import { chai } from "./chai-extra";
-import { SalesforceURL } from "@src/salesforceUrl";
+import { SalesforceURL } from "@/salesforceUrl";
 
 chai.should();
 

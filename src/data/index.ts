@@ -1,2 +1,8 @@
-export { TestDataManager as DataManager } from "./dataManager";
-export { RecordShape, RecordShapeConfig } from "./recordMatcher";
+export { ITestDataManager, TestDataManager } from "./dataManager";
+export {
+  RecordShape,
+  RecordShapeConfig,
+  IRecordShape,
+  IsRecord,
+  Matcher,
+} from "./recordMatcher";

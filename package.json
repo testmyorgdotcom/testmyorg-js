@@ -14,7 +14,7 @@
     "npm": "^6 || ^7"
   },
   "_moduleAliases": {
-    "@src": "out",
+    "@": "out",
     "@data": "out/data",
     "@persona": "out/persona"
   },

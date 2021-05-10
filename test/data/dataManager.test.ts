@@ -1,9 +1,9 @@
 import { chai } from "../chai-extra";
-import { DataManager, RecordShape } from "@data";
+import { TestDataManager, RecordShape } from "@data";
 import { whereEq } from "ramda";
 import { createSandbox } from "sinon";
 import { Record } from "jsforce";
-import { ITestDataManager } from "@src/data/dataManager";
+import { ITestDataManager } from "@data";
 
 chai.should();
 
@@ -18,7 +18,7 @@ describe("Data manager", () => {
     salesforceConnection = {
       insert: sandbox.stub().resolves("recordId"),
     };
-    dataManagerUnderTest = new DataManager(salesforceConnection);
+    dataManagerUnderTest = new TestDataManager(salesforceConnection);
   });
 
   afterEach(() => {
