@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "target": "ES5",
+    "lib": ["ES6", "DOM"],
     "declaration": true,
     "outDir": "./out",
     "importHelpers": true,
