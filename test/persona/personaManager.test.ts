@@ -1,12 +1,12 @@
 import { chai } from "../chai-extra";
-import { Persona, PersonaManager } from "@persona";
+import { Persona, PersonaManager, IPersonaManager } from "@persona";
 
 chai.should();
 
 const { todo } = test;
 
 describe("Persona Manager", () => {
-  let managerUnderTest: PersonaManager;
+  let managerUnderTest: IPersonaManager;
 
   beforeEach(() => {
     managerUnderTest = new PersonaManager();
@@ -66,6 +66,20 @@ describe("Persona Manager", () => {
       personaName
     );
     reservedSalesPersona.should.be.deep.equal(storedSalesPersona);
+  });
+
+  it("after persona is reserved - returns it even when single argument is called", () => {
+    const actorName = "Mike";
+    const personaName = "Sales";
+    const storedSalesPersona = new Persona(personaName);
+    managerUnderTest.addPersona(new Persona("Service"));
+    managerUnderTest.addPersona(storedSalesPersona);
+    const reservedSalesPersona = managerUnderTest.reservePersonaFor(
+      actorName,
+      personaName
+    );
+    const foundSalesPersona = managerUnderTest.reservePersonaFor(actorName);
+    foundSalesPersona.should.be.deep.equal(reservedSalesPersona);
   });
 
   it("does not allow to use reserved personas", () => {
