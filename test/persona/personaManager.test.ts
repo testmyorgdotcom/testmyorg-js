@@ -1,5 +1,7 @@
 import { chai } from "../chai-extra";
-import { Persona, PersonaManager, IPersonaManager } from "@persona";
+import { PersonaManager, IPersonaManager } from "@persona";
+import { Persona } from "@/models";
+import { Config } from "@config";
 
 chai.should();
 
@@ -122,6 +124,31 @@ describe("Persona Manager", () => {
     );
   });
 
-  todo("loads persona definitions from config file");
-  todo("returns back personas for re-use");
+  it("loads persona from config", () => {
+    const personaName = "Sales";
+    const storedSalesPersona = new Persona(personaName);
+    managerUnderTest = new PersonaManager(<Config>{
+      personas: function () {
+        return [storedSalesPersona];
+      },
+    });
+
+    const foundSalesPersona = managerUnderTest.reservePersonaFor("Mike");
+
+    foundSalesPersona.should.be.deep.equal(storedSalesPersona);
+  });
+
+  it("returns back personas for re-use", () => {
+    const expectedPersona = new Persona("test persona");
+    managerUnderTest.addPersona(expectedPersona);
+
+    managerUnderTest.reservePersonaFor("Mike");
+    managerUnderTest.tearDown("Mike");
+
+    const reservedPersona2 = managerUnderTest.reservePersonaFor("John");
+
+    reservedPersona2.should.be.deep.equal(expectedPersona);
+  });
+
+  todo("actor can have several personas");
 });
