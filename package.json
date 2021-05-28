@@ -16,7 +16,8 @@
   "_moduleAliases": {
     "@": "out",
     "@data": "out/data",
-    "@persona": "out/persona"
+    "@persona": "out/persona",
+    "@config": "out/config"
   },
   "dependencies": {
     "@cucumber/cucumber": "^7.0.0",

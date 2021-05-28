@@ -1,17 +1,8 @@
-import { Persona } from "@/models";
+import { ConfigImpl } from "./implementation";
+import { Config } from "./interface";
 
-const configFileName = "testmyorg.config.json";
+const defaultConfig: Config = new ConfigImpl();
 
-export class Config {
-  private rootPath: string;
+export { Config } from "./interface";
 
-  constructor(rootPath: string = process.cwd()) {
-    this.rootPath = rootPath;
-  }
-
-  personas(): Persona[] {
-    return require(`${this.rootPath}/${configFileName}`).personas.map(
-      (personaDefn: any) => new Persona(personaDefn.name)
-    );
-  }
-}
+export default defaultConfig;

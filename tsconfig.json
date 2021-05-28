@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES5",
     "lib": ["ES6", "DOM"],
+    "experimentalDecorators": true,
     "declaration": true,
     "outDir": "./out",
     "importHelpers": true,
@@ -12,7 +13,8 @@
     "paths": {
       "@/*": ["*"],
       "@data": ["data"],
-      "@persona": ["persona"]
+      "@persona": ["persona"],
+      "@config": ["config"]
     }
   },
   "include": [
