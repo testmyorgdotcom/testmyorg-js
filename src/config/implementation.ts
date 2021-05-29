@@ -27,6 +27,10 @@ export class ConfigImpl implements Config {
       return {};
     });
   }
+  commonPass(): string {
+    // TODO: implement
+    throw new Error("Method not implemented.");
+  }
 
   public personas(): Persona[] {
     return defaultToEmptyList(this.cache.personas).map(

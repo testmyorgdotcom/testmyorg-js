@@ -1,5 +1,6 @@
-import { Persona } from "@/models";
+import { Persona } from "@/persona";
 
 export interface Config {
   personas(): Persona[];
+  commonPass(): string;
 }
