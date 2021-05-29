@@ -149,6 +149,4 @@ describe("Persona Manager", () => {
 
     reservedPersona2.should.be.deep.equal(expectedPersona);
   });
-
-  todo("actor can have several personas");
 });
