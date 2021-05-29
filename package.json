@@ -7,7 +7,7 @@
     "test": "jest",
     "compile": "rm -rf out && tsc -b"
   },
-  "author": "nchursin@testmyorg.com",
+  "author": "testmyorg.com",
   "license": "Apache-2.0",
   "engines": {
     "node": "^10 || ^12 || ^14",
