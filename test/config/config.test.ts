@@ -22,13 +22,6 @@ describe("Config", () => {
     (config as any).rootPath.should.be.equal(alternativePath);
   });
 
-  it("returns empty list for personas if config file does not exist", () => {
-    const alternativePath = "/non/existing/path";
-    const config: Config = new ConfigImpl(alternativePath);
-
-    config.personas().should.be.deep.equal([]);
-  });
-
   it("loads personas from file", () => {
     const config: Config = new ConfigImpl(__dirname);
 
@@ -39,9 +32,26 @@ describe("Config", () => {
     config.personas().should.be.deep.equal(expectedPersonas);
   });
 
-  it("return empty list if no personas specified", () => {
+  it("returns commonPass specified in settings", () => {
+    const config: Config = new ConfigImpl(__dirname);
+
+    const expectedPass = testConfig.commonPass;
+
+    config.commonPass().should.be.deep.equal(expectedPass);
+  });
+
+  it("returns default values if config exists but empty", () => {
     const config: Config = new ConfigImpl(__dirname + "/emptyConfig");
 
     config.personas().should.be.deep.equal([]);
+    config.commonPass().should.be.deep.equal("");
+  });
+
+  it("returns default values if config doesn not exist", () => {
+    const alternativePath = "/non/existing/path";
+    const config: Config = new ConfigImpl(alternativePath);
+
+    config.personas().should.be.deep.equal([]);
+    config.commonPass().should.be.deep.equal("");
   });
 });

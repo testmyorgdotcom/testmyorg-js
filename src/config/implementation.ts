@@ -28,8 +28,7 @@ export class ConfigImpl implements Config {
     });
   }
   commonPass(): string {
-    // TODO: implement
-    throw new Error("Method not implemented.");
+    return this.cache.commonPass || "";
   }
 
   public personas(): Persona[] {
