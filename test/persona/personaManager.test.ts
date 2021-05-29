@@ -1,7 +1,6 @@
 import { chai } from "../chai-extra";
-import { PersonaManager, IPersonaManager } from "@persona";
-import { Persona } from "@/models";
-import { Config } from "@config";
+import { PersonaManager, IPersonaManager, Persona } from "@/persona";
+import { Config } from "@/config";
 
 chai.should();
 

@@ -1,7 +1,7 @@
 import { propEq, __ } from "ramda";
-import { Persona } from "@/models";
-import { Config } from "@config";
-import defaultConfig from "@config";
+import { Persona } from "./persona";
+import { Config } from "@/config";
+import defaultConfig from "@/config";
 
 export interface IPersonaManager {
   tearDown(actorName: string, reservedPersona?: Persona);

@@ -1,7 +1,5 @@
 import { chai } from "../chai-extra";
-import { RecordShape, RecordShapeConfig } from "@data";
-import { whereEq } from "ramda";
-import { createSandbox } from "sinon";
+import { RecordShape, RecordShapeConfig } from "@/data";
 import { Record } from "jsforce";
 
 const { todo } = test;

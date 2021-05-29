@@ -14,10 +14,7 @@
     "npm": "^6 || ^7"
   },
   "_moduleAliases": {
-    "@": "out",
-    "@data": "out/data",
-    "@persona": "out/persona",
-    "@config": "out/config"
+    "@": "out"
   },
   "dependencies": {
     "@cucumber/cucumber": "^7.0.0",

@@ -1,9 +1,9 @@
 import { chai } from "../chai-extra";
-import { TestDataManager, RecordShape } from "@data";
+import { TestDataManager, RecordShape } from "@/data";
 import { whereEq } from "ramda";
 import { createSandbox } from "sinon";
 import { Record } from "jsforce";
-import { ITestDataManager } from "@data";
+import { ITestDataManager } from "@/data";
 
 chai.should();
 

@@ -1,7 +1,7 @@
-import { Persona } from "@/models";
+import { Persona } from "@/persona";
 import { ConfigImpl } from "@/config/implementation";
 import { Config } from "@/config/interface";
-import config from "@config";
+import config from "@/config";
 import { chai } from "../chai-extra";
 
 const testConfig = require("./testmyorg.config");

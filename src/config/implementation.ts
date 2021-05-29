@@ -1,4 +1,4 @@
-import { Persona } from "@/models";
+import { Persona } from "@/persona/persona";
 import { Lazy } from "@/utils/lazy";
 import { defaultTo } from "ramda";
 import { existsSync } from "fs";

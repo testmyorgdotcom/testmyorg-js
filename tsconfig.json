@@ -11,10 +11,7 @@
     "baseUrl": "./src",
     "noUnusedLocals": false,
     "paths": {
-      "@/*": ["*"],
-      "@data": ["data"],
-      "@persona": ["persona"],
-      "@config": ["config"]
+      "@/*": ["*"]
     }
   },
   "include": [
