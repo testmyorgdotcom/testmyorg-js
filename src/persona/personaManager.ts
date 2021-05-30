@@ -1,7 +1,6 @@
 import { propEq, __ } from "ramda";
 import { Persona } from "./persona";
 import { Config } from "@/config";
-import defaultConfig from "@/config";
 
 export interface IPersonaManager {
   tearDown(actorName: string, reservedPersona?: Persona);
@@ -14,7 +13,7 @@ export class PersonaManager implements IPersonaManager {
   private personas: Array<Persona>;
   private actorPersona: Map<string, Persona>;
 
-  constructor(config: Config = defaultConfig) {
+  constructor(config: Config) {
     this.personas = config.personas();
     this.actorPersona = new Map();
   }
