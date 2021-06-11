@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "compile": "rm -rf out && tsc -b"
+    "compile": "rm -rf out && tsc -b",
+    "build": "yarn compile",
+    "build:samples": "yarn build && rm -rf ../testmyorgjs-samples/node_modules/testmyorg-js && cp -r out/src ../testmyorgjs-samples/node_modules/testmyorg-js"
   },
   "author": "testmyorg.com",
   "license": "Apache-2.0",
