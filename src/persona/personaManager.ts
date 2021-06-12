@@ -1,18 +1,18 @@
 import { propEq, __ } from "ramda";
 import { Persona } from "./persona";
 import { Config } from "@/config";
-import { Actor } from "@serenity-js/core";
+import { UsesAbilities } from "@serenity-js/core";
 
 export interface PersonaManager {
-  tearDown(actor: Actor);
+  tearDown(actor: UsesAbilities);
   getAllPersonas(): ReadonlyArray<Persona>;
   addPersona(expectedPersona: Persona);
-  reservePersonaFor(actor: Actor, personaName?: string): Persona;
+  reservePersonaFor(actor: UsesAbilities, personaName?: string): Persona;
 }
 
 export class PersonaManagerImpl implements PersonaManager {
   private personas: Array<Persona>;
-  private actorPersona: Map<Actor, Persona>;
+  private actorPersona: Map<UsesAbilities, Persona>;
 
   constructor(config: Config) {
     this.personas = config.personas();
@@ -23,7 +23,7 @@ export class PersonaManagerImpl implements PersonaManager {
     return new Set(this.actorPersona.values());
   }
 
-  public tearDown(actor: Actor) {
+  public tearDown(actor: UsesAbilities) {
     this.actorPersona.delete(actor);
   }
 
@@ -35,14 +35,17 @@ export class PersonaManagerImpl implements PersonaManager {
     this.personas.push(expectedPersona);
   }
 
-  public reservePersonaFor(actor: Actor, personaName?: string): Persona {
+  public reservePersonaFor(
+    actor: UsesAbilities,
+    personaName?: string
+  ): Persona {
     if (!this.actorPersona.has(actor)) {
       this.reserveNewPersona(actor, personaName);
     }
     return this.actorPersona.get(actor);
   }
 
-  private reserveNewPersona(actor: Actor, personaName?: string) {
+  private reserveNewPersona(actor: UsesAbilities, personaName?: string) {
     let condition: (a: Persona) => boolean;
     if (personaName) {
       condition = propEq("personaName", personaName);
