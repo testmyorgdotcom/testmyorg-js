@@ -1,16 +1,18 @@
 import { propEq, __ } from "ramda";
 import { Persona } from "./persona";
 import { Config } from "@/config";
+import { Actor } from "@serenity-js/core";
 
 export interface PersonaManager {
+  tearDown(actor: Actor);
   getAllPersonas(): ReadonlyArray<Persona>;
   addPersona(expectedPersona: Persona);
-  reservePersonaFor(actorName: string, personaName?: string): Persona;
+  reservePersonaFor(actor: Actor, personaName?: string): Persona;
 }
 
 export class PersonaManagerImpl implements PersonaManager {
   private personas: Array<Persona>;
-  private actorPersona: Map<string, Persona>;
+  private actorPersona: Map<Actor, Persona>;
 
   constructor(config: Config) {
     this.personas = config.personas();
@@ -21,8 +23,8 @@ export class PersonaManagerImpl implements PersonaManager {
     return new Set(this.actorPersona.values());
   }
 
-  public tearDown(actorName: string, reservedPersona?: Persona) {
-    this.actorPersona.delete(actorName);
+  public tearDown(actor: Actor) {
+    this.actorPersona.delete(actor);
   }
 
   public getAllPersonas(): ReadonlyArray<Persona> {
@@ -33,20 +35,20 @@ export class PersonaManagerImpl implements PersonaManager {
     this.personas.push(expectedPersona);
   }
 
-  public reservePersonaFor(actorName: string, personaName?: string): Persona {
-    if (!this.actorPersona.has(actorName)) {
-      this.reserveNewPersona(actorName, personaName);
+  public reservePersonaFor(actor: Actor, personaName?: string): Persona {
+    if (!this.actorPersona.has(actor)) {
+      this.reserveNewPersona(actor, personaName);
     }
-    return this.actorPersona.get(actorName);
+    return this.actorPersona.get(actor);
   }
 
-  private reserveNewPersona(actorName: string, personaName?: string) {
+  private reserveNewPersona(actor: Actor, personaName?: string) {
     let condition: (a: Persona) => boolean;
     if (personaName) {
       condition = propEq("personaName", personaName);
     }
     const persona = this.findFreePersona(condition);
-    this.actorPersona.set(actorName, persona);
+    this.actorPersona.set(actor, persona);
   }
 
   private findFreePersona(

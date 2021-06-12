@@ -1,6 +1,7 @@
 import { chai } from "../chai-extra";
 import { PersonaManagerImpl, PersonaManager, Persona } from "@/persona";
 import defaultConfig, { Config } from "@/config";
+import { actorCalled } from "@serenity-js/core";
 
 chai.should();
 
@@ -21,7 +22,9 @@ describe("Persona Manager", () => {
   it("reserves persona for actor", () => {
     const expectedPersona = new Persona("test persona");
     managerUnderTest.addPersona(expectedPersona);
-    const actualPersona = managerUnderTest.reservePersonaFor("any actor");
+    const actualPersona = managerUnderTest.reservePersonaFor(
+      actorCalled("any actor")
+    );
     actualPersona.should.be.deep.equal(expectedPersona);
   });
 
@@ -31,22 +34,25 @@ describe("Persona Manager", () => {
     const expectedPersona2 = new Persona("2");
     managerUnderTest.addPersona(expectedPersona2);
 
-    managerUnderTest.reservePersonaFor("1st actor");
-    const persona = managerUnderTest.reservePersonaFor("2nd actor");
+    managerUnderTest.reservePersonaFor(actorCalled("1st actor"));
+    const persona = managerUnderTest.reservePersonaFor(
+      actorCalled("2nd actor")
+    );
 
     persona.should.be.equal(expectedPersona2);
   });
 
   it("exception if no available personas", () => {
-    (() => managerUnderTest.reservePersonaFor("1st actor")).should.throw(
-      "No free personas"
-    );
+    (() =>
+      managerUnderTest.reservePersonaFor(
+        actorCalled("1st actor")
+      )).should.throw("No free personas");
   });
 
   it("reuse persona for actor", () => {
     const storedPersona = new Persona("test persona");
     managerUnderTest.addPersona(storedPersona);
-    const actor = "Mike";
+    const actor = actorCalled("Mike");
 
     const expectedPersona = managerUnderTest.reservePersonaFor(actor);
     const actualPersona = managerUnderTest.reservePersonaFor(actor);
@@ -55,42 +61,43 @@ describe("Persona Manager", () => {
   });
 
   it("reserve specific persona", () => {
-    const actorName = "Mike";
+    const actor = actorCalled("Mike");
     const personaName = "Sales";
     const storedSalesPersona = new Persona(personaName);
     managerUnderTest.addPersona(new Persona("Service"));
     managerUnderTest.addPersona(storedSalesPersona);
     const reservedSalesPersona = managerUnderTest.reservePersonaFor(
-      actorName,
+      actor,
       personaName
     );
     reservedSalesPersona.should.be.deep.equal(storedSalesPersona);
   });
 
   it("after persona is reserved - returns it even when single argument is called", () => {
-    const actorName = "Mike";
+    const actor = actorCalled("Mike");
     const personaName = "Sales";
     const storedSalesPersona = new Persona(personaName);
     managerUnderTest.addPersona(new Persona("Service"));
     managerUnderTest.addPersona(storedSalesPersona);
     const reservedSalesPersona = managerUnderTest.reservePersonaFor(
-      actorName,
+      actor,
       personaName
     );
-    const foundSalesPersona = managerUnderTest.reservePersonaFor(actorName);
+    const foundSalesPersona = managerUnderTest.reservePersonaFor(actor);
     foundSalesPersona.should.be.deep.equal(reservedSalesPersona);
   });
 
   it("does not allow to use reserved personas", () => {
-    const actorName = "Mike";
+    const actor = actorCalled("Mike");
     const personaName = "Sales";
     const storedSalesPersona = new Persona(personaName);
     managerUnderTest.addPersona(storedSalesPersona);
-    managerUnderTest.reservePersonaFor(actorName, personaName);
+    managerUnderTest.reservePersonaFor(actor, personaName);
 
-    (() => managerUnderTest.reservePersonaFor("another actor")).should.throw(
-      "No free personas"
-    );
+    (() =>
+      managerUnderTest.reservePersonaFor(
+        actorCalled("another actor")
+      )).should.throw("No free personas");
   });
 
   it("reserves new persona if there are several of a type", () => {
@@ -100,9 +107,9 @@ describe("Persona Manager", () => {
 
     managerUnderTest.addPersona(storedSalesPersona1);
     managerUnderTest.addPersona(storedSalesPersona2);
-    managerUnderTest.reservePersonaFor("Mike", personaName);
+    managerUnderTest.reservePersonaFor(actorCalled("Mike"), personaName);
     const actualPersona = managerUnderTest.reservePersonaFor(
-      "John",
+      actorCalled("John"),
       personaName
     );
 
@@ -114,23 +121,26 @@ describe("Persona Manager", () => {
     const storedSalesPersona = new Persona(personaName);
 
     managerUnderTest.addPersona(storedSalesPersona);
-    managerUnderTest.reservePersonaFor("Mike", personaName);
+    managerUnderTest.reservePersonaFor(actorCalled("Mike"), personaName);
     (() =>
-      managerUnderTest.reservePersonaFor("John", personaName)).should.throw(
-      "No free personas"
-    );
+      managerUnderTest.reservePersonaFor(
+        actorCalled("John"),
+        personaName
+      )).should.throw("No free personas");
   });
 
   it("loads persona from config", () => {
     const personaName = "Sales";
     const storedSalesPersona = new Persona(personaName);
-    managerUnderTest = new PersonaManager(<Config>{
+    managerUnderTest = new PersonaManagerImpl(<Config>{
       personas: function () {
         return [storedSalesPersona];
       },
     });
 
-    const foundSalesPersona = managerUnderTest.reservePersonaFor("Mike");
+    const foundSalesPersona = managerUnderTest.reservePersonaFor(
+      actorCalled("Mike")
+    );
 
     foundSalesPersona.should.be.deep.equal(storedSalesPersona);
   });
@@ -139,10 +149,12 @@ describe("Persona Manager", () => {
     const expectedPersona = new Persona("test persona");
     managerUnderTest.addPersona(expectedPersona);
 
-    managerUnderTest.reservePersonaFor("Mike");
-    managerUnderTest.tearDown("Mike");
+    managerUnderTest.reservePersonaFor(actorCalled("Mike"));
+    managerUnderTest.tearDown(actorCalled("Mike"));
 
-    const reservedPersona2 = managerUnderTest.reservePersonaFor("John");
+    const reservedPersona2 = managerUnderTest.reservePersonaFor(
+      actorCalled("John")
+    );
 
     reservedPersona2.should.be.deep.equal(expectedPersona);
   });
