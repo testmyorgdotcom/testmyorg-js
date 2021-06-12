@@ -1,14 +1,14 @@
 import { chai } from "../chai-extra";
-import { PersonaManager, IPersonaManager, Persona } from "@/persona";
+import { PersonaManagerImpl, PersonaManager, Persona } from "@/persona";
 import defaultConfig, { Config } from "@/config";
 
 chai.should();
 
 describe("Persona Manager", () => {
-  let managerUnderTest: IPersonaManager;
+  let managerUnderTest: PersonaManager;
 
   beforeEach(() => {
-    managerUnderTest = new PersonaManager(defaultConfig);
+    managerUnderTest = new PersonaManagerImpl(defaultConfig);
   });
 
   it("has personas", () => {

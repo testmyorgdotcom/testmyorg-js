@@ -4,5 +4,6 @@
       "name": "Sales"
     }
   ],
-  "commonPass": "commonPass"
+  "commonPass": "commonPass",
+  "loginUrl": "loginUrl"
 }

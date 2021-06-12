@@ -1,12 +1,12 @@
 import defaultConfig, { Config } from "./config";
-import { PersonaManager } from "./persona";
+import { PersonaManagerImpl, PersonaManager } from "./persona";
 
 export interface TestContext {
-  config: Config;
-  personaManager: PersonaManager;
+  readonly config: Config;
+  readonly personaManager: PersonaManager;
 }
 
-export const context = {
+export const context: TestContext = {
   config: defaultConfig,
-  personaManager: new PersonaManager(defaultConfig),
+  personaManager: new PersonaManagerImpl(defaultConfig),
 };

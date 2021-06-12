@@ -2,14 +2,13 @@ import { propEq, __ } from "ramda";
 import { Persona } from "./persona";
 import { Config } from "@/config";
 
-export interface IPersonaManager {
-  tearDown(actorName: string, reservedPersona?: Persona);
+export interface PersonaManager {
   getAllPersonas(): ReadonlyArray<Persona>;
   addPersona(expectedPersona: Persona);
   reservePersonaFor(actorName: string, personaName?: string): Persona;
 }
 
-export class PersonaManager implements IPersonaManager {
+export class PersonaManagerImpl implements PersonaManager {
   private personas: Array<Persona>;
   private actorPersona: Map<string, Persona>;
 

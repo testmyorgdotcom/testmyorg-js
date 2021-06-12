@@ -27,6 +27,11 @@ export class ConfigImpl implements Config {
       return {};
     });
   }
+
+  loginUrl(): string {
+    return this.cache.loginUrl || "https://login.salesforce.com";
+  }
+
   commonPass(): string {
     return this.cache.commonPass || "";
   }

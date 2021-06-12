@@ -11,6 +11,12 @@ chai.should();
 const { todo } = test;
 
 describe("Config", () => {
+  const expectDefaultValues = (config) => {
+    config.personas().should.be.deep.equal([]);
+    config.commonPass().should.be.deep.equal("");
+    config.loginUrl().should.be.deep.equal("https://login.salesforce.com");
+  };
+
   it("default path is process.cwd()", () => {
     (config as any).rootPath.should.be.equal(process.cwd());
   });
@@ -40,18 +46,24 @@ describe("Config", () => {
     config.commonPass().should.be.deep.equal(expectedPass);
   });
 
+  it("returns loginUrl specified in settings", () => {
+    const config: Config = new ConfigImpl(__dirname);
+
+    const expectedLoginUrl = testConfig.loginUrl;
+
+    config.loginUrl().should.be.deep.equal(expectedLoginUrl);
+  });
+
   it("returns default values if config exists but empty", () => {
     const config: Config = new ConfigImpl(__dirname + "/emptyConfig");
 
-    config.personas().should.be.deep.equal([]);
-    config.commonPass().should.be.deep.equal("");
+    expectDefaultValues(config);
   });
 
   it("returns default values if config doesn not exist", () => {
     const alternativePath = "/non/existing/path";
     const config: Config = new ConfigImpl(alternativePath);
 
-    config.personas().should.be.deep.equal([]);
-    config.commonPass().should.be.deep.equal("");
+    expectDefaultValues(config);
   });
 });
