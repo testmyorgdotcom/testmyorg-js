@@ -75,13 +75,7 @@ describe("AuthenticateWithCredentials ability", () => {
     ability.persona().should.be.equal(expectedPersona);
   });
 
-  it("resolves credntials", () => {
-    const actor = actorCalled("testActor").whoCan(
-      Authenticate.asPersonaCalled(
-        "Sales",
-        personaManager
-      ).withCredentialsProvider(credentialProvider)
-    );
+  it("resolves credentials", () => {
     const expectedCredentials: Credentials = new BasicCredentials(
       "username",
       "passwd"
@@ -95,7 +89,7 @@ describe("AuthenticateWithCredentials ability", () => {
     ability.credentials().should.be.deep.equal(expectedCredentials);
   });
 
-  it("checks credential provider existence when .as(actor) is called", () => {
+  it("defaults credentials provider to LightCredentialsProvider", () => {
     const actor = actorCalled(
       "TestActor With Ability Without CredentialsProvider"
     ).whoCan(Authenticate.asPersonaCalled("Sales", personaManager));
