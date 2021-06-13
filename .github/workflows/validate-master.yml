@@ -3,9 +3,44 @@ on:
   push:
     paths:
       - "**.ts"
+      - ".github/workflows/validate-master.yml"
 jobs:
-  test:
-    runs-on: [ubuntu-latest, macos-latest, windows-latest]
+  test-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+      - run: echo "⭐️ NodeJS is setup on the runner"
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - run: yarn
+      - run: yarn compile && yarn test
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  test-mac:
+    runs-on: macos-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+      - run: echo "⭐️ NodeJS is setup on the runner"
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - run: yarn
+      - run: yarn compile && yarn test
+      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+  test-windows:
+    runs-on: windows-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
