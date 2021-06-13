@@ -1,4 +1,4 @@
-name: validate-master
+name: test run
 on:
   push:
     paths:
