@@ -4,6 +4,10 @@ on:
     paths:
       - "**.ts"
       - ".github/workflows/validate-master.yml"
+  pull_request:
+    paths:
+      - "**.ts"
+      - ".github/workflows/validate-master.yml"
 jobs:
   test-linux:
     runs-on: ubuntu-latest
