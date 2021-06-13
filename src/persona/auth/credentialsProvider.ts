@@ -6,11 +6,11 @@ export interface Credentials {
   password(): string;
 }
 
-export interface ICredentialsProvider {
+export interface CredentialsProvider {
   getCredentialsFor(persona: Persona): Credentials;
 }
 
-export class LightCredentialsProvider implements ICredentialsProvider {
+export class LightCredentialsProvider implements CredentialsProvider {
   private config: Config;
 
   constructor(config: Config = defaultConfig) {

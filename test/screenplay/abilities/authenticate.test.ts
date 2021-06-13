@@ -4,7 +4,7 @@ import { Persona, PersonaManager } from "@/persona";
 import {
   BasicCredentials,
   Credentials,
-  ICredentialsProvider,
+  CredentialsProvider,
   LightCredentialsProvider,
 } from "@/persona/auth";
 import { Authenticate } from "@/screenplay/abilities/authenticate";
@@ -21,7 +21,7 @@ describe("AuthenticateWithCredentials ability", () => {
   const sandbox = createSandbox();
   let personaManager: PersonaManager;
   let actor;
-  let credentialProvider: ICredentialsProvider;
+  let credentialProvider: CredentialsProvider;
 
   beforeEach(() => {
     personaManager = {

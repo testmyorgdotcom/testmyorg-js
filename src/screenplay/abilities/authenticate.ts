@@ -3,13 +3,13 @@ import { Ability, Actor, UsesAbilities } from "@serenity-js/core";
 import { context } from "@/context";
 import {
   Credentials,
-  ICredentialsProvider,
+  CredentialsProvider,
   LightCredentialsProvider,
 } from "@/persona/auth";
 
 export class Authenticate implements Ability {
   private _persona: Persona; // = new Lazy(() => this.personaManager.);
-  private credentialsProvider: ICredentialsProvider;
+  private credentialsProvider: CredentialsProvider;
 
   private constructor(
     private readonly personaName: string,
@@ -25,14 +25,14 @@ export class Authenticate implements Ability {
   }
 
   public withCredentialsProvider(
-    credentialsProvider: ICredentialsProvider
+    credentialsProvider: CredentialsProvider
   ): Authenticate {
     this.credentialsProvider = credentialsProvider;
     return this;
   }
 
   private defaultCredentialsProvider(
-    credentialsProvider: ICredentialsProvider
+    credentialsProvider: CredentialsProvider
   ): void {
     this.credentialsProvider = this.credentialsProvider || credentialsProvider;
   }
