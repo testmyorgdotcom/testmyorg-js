@@ -3,11 +3,11 @@ on:
   push:
     paths:
       - "**.ts"
-      - ".github/workflows/validate-master.yml"
+      - ".github/workflows/test-run.yml"
   pull_request:
     paths:
       - "**.ts"
-      - ".github/workflows/validate-master.yml"
+      - ".github/workflows/test-run.yml"
 jobs:
   test-linux:
     runs-on: ubuntu-latest
