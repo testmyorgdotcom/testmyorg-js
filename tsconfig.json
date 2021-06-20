@@ -4,10 +4,10 @@
     "lib": ["ES6", "DOM"],
     "experimentalDecorators": true,
     "declaration": true,
-    "outDir": "./out",
+    "outDir": "./lib",
     "importHelpers": true,
     "skipLibCheck": true,
-    "rootDir": ".",
+    "rootDir": "./src",
     "baseUrl": "./src",
     "noUnusedLocals": false,
     "paths": {

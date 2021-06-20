@@ -1674,6 +1674,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"better-module-alias@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "better-module-alias@npm:1.1.0"
+  checksum: b6a96bf534dac43d0a6d9b5cd266a23208fd617f131383b7c78b5ee7810ec027b118a6128e19a23e0fc9fc442338ba647d5e784e6eca3041aaad9b839602caf2
+  languageName: node
+  linkType: hard
+
 "bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
@@ -4777,13 +4784,6 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"module-alias@npm:^2.2.2":
-  version: 2.2.2
-  resolution: "module-alias@npm:2.2.2"
-  checksum: 1b37943df4fbe56799688eb3496f5113f7f1e18ff7a53bd3543e93fd4ee6c4b04e1548fc0cb49ae73e086b18ee712ab3321f6d7f5444cf413c638914decb8918
-  languageName: node
-  linkType: hard
-
 "moment@npm:^2.29.1":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
@@ -6392,12 +6392,12 @@ fsevents@^2.1.2:
     "@types/ramda": ^0.27.40
     "@types/sinon": ^10.0.2
     "@types/sinon-chai": ^3.2.5
+    better-module-alias: ^1.1.0
     chai: ^4.3.4
     chai-as-promised: ^7.1.1
     dotenv: ^8.6.0
     jest: ^26.6.3
     jsforce: ^1.10.1
-    module-alias: ^2.2.2
     npm-failsafe: ^0.4.3
     playwright: ^1.11.1
     ramda: ^0.27.1
