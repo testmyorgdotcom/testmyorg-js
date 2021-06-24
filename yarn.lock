@@ -1674,13 +1674,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"better-module-alias@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "better-module-alias@npm:1.1.0"
-  checksum: b6a96bf534dac43d0a6d9b5cd266a23208fd617f131383b7c78b5ee7810ec027b118a6128e19a23e0fc9fc442338ba647d5e784e6eca3041aaad9b839602caf2
-  languageName: node
-  linkType: hard
-
 "bluebird@npm:^3.7.2":
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
@@ -6392,7 +6385,6 @@ fsevents@^2.1.2:
     "@types/ramda": ^0.27.40
     "@types/sinon": ^10.0.2
     "@types/sinon-chai": ^3.2.5
-    better-module-alias: ^1.1.0
     chai: ^4.3.4
     chai-as-promised: ^7.1.1
     dotenv: ^8.6.0

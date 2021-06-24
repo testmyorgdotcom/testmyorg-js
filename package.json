@@ -15,9 +15,6 @@
     "node": "^10 || ^12 || ^14",
     "npm": "^6 || ^7"
   },
-  "_moduleAliases": {
-    "@": "lib"
-  },
   "dependencies": {
     "@cucumber/cucumber": "^7.2.1",
     "@serenity-js/assertions": "^2.29.0",
@@ -26,7 +23,6 @@
     "@serenity-js/cucumber": "^2.29.0",
     "@serenity-js/rest": "^2.29.0",
     "@serenity-js/serenity-bdd": "^2.29.0",
-    "better-module-alias": "^1.1.0",
     "dotenv": "^8.6.0",
     "jsforce": "^1.10.1",
     "npm-failsafe": "^0.4.3",

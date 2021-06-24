@@ -1,5 +1,5 @@
-import defaultConfig, { Config } from "@/config";
-import { Persona } from "@/persona";
+import defaultConfig, { Config } from "../../config";
+import { Persona } from "../persona";
 
 export interface Credentials {
   username(): string;

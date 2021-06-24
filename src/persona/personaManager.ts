@@ -1,6 +1,6 @@
 import { propEq, __ } from "ramda";
 import { Persona } from "./persona";
-import { Config } from "@/config";
+import { Config } from "../config";
 import { UsesAbilities } from "@serenity-js/core";
 
 export interface PersonaManager {
