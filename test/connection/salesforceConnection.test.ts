@@ -1,5 +1,8 @@
 import { chai } from "@/../test/chai-extra";
-import { SalesforceConnection } from "@/connection/salesforceConnection";
+import {
+  SalesforceConnectionImpl,
+  SalesforceConnection,
+} from "@/connection/salesforceConnection";
 import { BasicCredentials } from "@/persona/auth";
 import { createSandbox, SinonStub } from "sinon";
 
@@ -19,7 +22,7 @@ describe("Connection manager", () => {
   };
 
   beforeEach(() => {
-    salesforceConnection = new SalesforceConnection(loginUrl);
+    salesforceConnection = new SalesforceConnectionImpl(loginUrl);
   });
 
   it("creates connection from loginUrl in config", () => {
