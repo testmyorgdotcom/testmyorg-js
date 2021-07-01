@@ -1,1 +1,1 @@
-export * from "./connectionManager";
+export * from "./salesforceConnection";
