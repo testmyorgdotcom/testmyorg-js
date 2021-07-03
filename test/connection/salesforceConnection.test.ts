@@ -3,8 +3,10 @@ import {
   SalesforceConnectionImpl,
   SalesforceConnection,
 } from "@/connection/salesforceConnection";
+import { SalesforceQuery } from "@/data/queryBuilder";
 import { BasicCredentials } from "@/persona/auth";
 import { createSandbox, SinonStub } from "sinon";
+import { QueryResult, Record } from "jsforce";
 
 chai.should();
 
@@ -18,7 +20,7 @@ describe("Connection manager", () => {
   const connection = () => (salesforceConnection as any).connection;
   const mockConnectionMethod = (methodName): SinonStub => {
     connection()[methodName] = sandbox.stub();
-    return (salesforceConnection as any)[methodName];
+    return connection()[methodName];
   };
 
   beforeEach(() => {
@@ -37,5 +39,46 @@ describe("Connection manager", () => {
 
     connection().login.should.have.been.called;
     connection().login.should.have.been.calledWith("username", "password");
+  });
+
+  it("returns state of being logged in", async () => {
+    mockConnectionMethod("login").resolves({
+      id: "userId",
+      organizationId: "orgId",
+      url: "url",
+    });
+    const username = "username";
+    const password = "password";
+
+    salesforceConnection.isAutheticated().should.be.equal(false);
+    await salesforceConnection.login(new BasicCredentials(username, password));
+    salesforceConnection.isAutheticated().should.be.equal(true);
+  });
+
+  it("queries data", async () => {
+    mockConnectionMethod("query").resolves();
+
+    salesforceConnection.query(<SalesforceQuery>{
+      toString: () => "SELECT Id FROM Account",
+    });
+
+    connection().query.should.have.been.called;
+    connection().query.should.have.been.calledWith("SELECT Id FROM Account");
+  });
+
+  it("returns queried data data", async () => {
+    const queryResult = <QueryResult<Record>>{
+      done: true,
+      totalSize: 2,
+      records: [{ type: "Account", Name: "test Acc" }],
+    };
+    mockConnectionMethod("query").resolves(queryResult);
+
+    const result = await salesforceConnection.query(<SalesforceQuery>{
+      toString: () => "SELECT Id FROM Account",
+    });
+
+    expect(result).to.exist;
+    result.should.be.deep.equal(queryResult.records);
   });
 });
