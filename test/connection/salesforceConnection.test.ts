@@ -56,7 +56,7 @@ describe("Connection manager", () => {
   });
 
   it("queries data", async () => {
-    mockConnectionMethod("query").resolves();
+    mockConnectionMethod("query").resolves({});
 
     salesforceConnection.query(<SalesforceQuery>{
       toString: () => "SELECT Id FROM Account",
