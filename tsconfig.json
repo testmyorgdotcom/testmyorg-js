@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "lib": ["ES6", "DOM"],
+    "target": "ES2018",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["es2018", "ES6", "DOM"],
     "experimentalDecorators": true,
     "declaration": true,
-    "outDir": "./out",
+    "outDir": "./lib",
+    "esModuleInterop": true,
     "importHelpers": true,
     "skipLibCheck": true,
-    "rootDir": ".",
+    "rootDir": "./src",
     "baseUrl": "./src",
     "noUnusedLocals": false,
     "paths": {
@@ -16,5 +19,8 @@
   },
   "include": [
     "./src/**/*"
+  ],
+  "exclude": [
+    ".yalc/**/*"
   ]
 }

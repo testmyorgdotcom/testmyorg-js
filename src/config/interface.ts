@@ -1,4 +1,4 @@
-import { Persona } from "@/persona";
+import { Persona } from "../persona";
 
 export interface Config {
   personas(): Persona[];

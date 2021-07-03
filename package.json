@@ -2,21 +2,19 @@
   "name": "testmyorg-js",
   "version": "0.1.0",
   "description": "TestMyOrg-JS framework to automate e2e testing for your Salesforce organization",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
-    "test": "jest",
-    "compile": "rm -rf out && tsc -b",
+    "test": "jest && yarn compile",
+    "compile": "tsc --project tsconfig.json",
     "build": "yarn compile",
-    "build:samples": "yarn build && rm -rf ../testmyorgjs-samples/node_modules/testmyorg-js && cp -r out/src ../testmyorgjs-samples/node_modules/testmyorg-js"
+    "build:yalc": "yarn build && yalc publish"
   },
   "author": "testmyorg.com",
   "license": "Apache-2.0",
   "engines": {
     "node": "^10 || ^12 || ^14",
     "npm": "^6 || ^7"
-  },
-  "_moduleAliases": {
-    "@": "out"
   },
   "dependencies": {
     "@cucumber/cucumber": "^7.2.1",
@@ -28,7 +26,6 @@
     "@serenity-js/serenity-bdd": "^2.29.0",
     "dotenv": "^8.6.0",
     "jsforce": "^1.10.1",
-    "module-alias": "^2.2.2",
     "npm-failsafe": "^0.4.3",
     "playwright": "^1.11.1",
     "ramda": "^0.27.1",
@@ -38,16 +35,18 @@
     "typescript": "^4.3.2"
   },
   "devDependencies": {
-    "@types/jsforce": "^1.9.29",
-    "@types/ramda": "^0.27.40",
     "@types/chai": "^4.2.18",
     "@types/chai-as-promised": "^7.1.4",
+    "@types/chai-string": "^1.4.2",
     "@types/jest": "^26.0.23",
+    "@types/jsforce": "^1.9.29",
     "@types/node": "^14.17.2",
+    "@types/ramda": "^0.27.40",
     "@types/sinon": "^10.0.2",
     "@types/sinon-chai": "^3.2.5",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
+    "chai-string": "^1.5.0",
     "jest": "^26.6.3",
     "sinon": "^10.0.0",
     "sinon-chai": "^3.7.0",

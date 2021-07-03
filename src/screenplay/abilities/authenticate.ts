@@ -1,11 +1,11 @@
-import { Persona, PersonaManager } from "@/persona";
+import { Persona, PersonaManager } from "../../persona";
 import { Ability, Actor, UsesAbilities } from "@serenity-js/core";
-import { context } from "@/context";
+import { context } from "../../context";
 import {
   Credentials,
   CredentialsProvider,
   LightCredentialsProvider,
-} from "@/persona/auth";
+} from "../../persona/auth";
 
 export class Authenticate implements Ability {
   private _persona: Persona; // = new Lazy(() => this.personaManager.);
