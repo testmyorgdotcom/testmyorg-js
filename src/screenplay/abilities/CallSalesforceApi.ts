@@ -1,18 +1,46 @@
 import { SalesforceQuery } from "../../data/queryBuilder";
-import { Ability } from "@serenity-js/core";
-import { SalesforceConnection } from "../../connection";
+import { Ability, Actor, UsesAbilities } from "@serenity-js/core";
+import {
+  SalesforceConnection,
+  SalesforceConnectionImpl,
+} from "../../connection";
 import { Credentials } from "../../persona/auth";
-import { Record } from "jsforce";
+import { Record, UserInfo } from "jsforce";
+
+export class Call {
+  static salesforceAPI(): Ability {
+    return CallSalesforceApi.using(new SalesforceConnectionImpl());
+  }
+}
 
 export class CallSalesforceApi implements Ability {
-  private constructor(protected readonly connection: SalesforceConnection) {}
+  public static as(actor: UsesAbilities): CallSalesforceApi {
+    return actor.abilityTo(CallSalesforceApi);
+  }
 
+  protected constructor(protected readonly connection: SalesforceConnection) {}
+
+  /**
+   * @package
+   * @description
+   *  Please Use Call.salesforceAPI() instead
+   *
+   * @param connection
+   * @returns
+   */
   static using(connection: SalesforceConnection): CallSalesforceApi {
     return new this(connection);
   }
 
-  login(creds: Credentials) {
-    this.connection.login(creds);
+  async login(
+    creds: Credentials
+  ): Promise<UserInfo & { sessionId: string; instanceUrl: string }> {
+    const userInfo = await this.connection.login(creds);
+    return {
+      ...userInfo,
+      sessionId: this.connection.sessionId(),
+      instanceUrl: this.connection.instanceUrl(),
+    };
   }
 
   async query(query: SalesforceQuery): Promise<Record[]> {

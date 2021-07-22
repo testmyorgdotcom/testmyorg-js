@@ -8,6 +8,8 @@ export interface SalesforceConnection {
   query(query: SalesforceQuery): Promise<Record[]>;
   login(creds: Credentials): Promise<UserInfo>;
   isAutheticated(): boolean;
+  sessionId(): string;
+  instanceUrl(): string;
 }
 
 export class SalesforceConnectionImpl implements SalesforceConnection {
@@ -25,9 +27,18 @@ export class SalesforceConnectionImpl implements SalesforceConnection {
   async login(creds: Credentials): Promise<UserInfo> {
     this.userInfo = await this.connection.login(
       creds.username(),
-      creds.password()
+      creds.password() + (creds.token() || "")
     );
+
     return this.userInfo;
+  }
+
+  sessionId() {
+    return this.connection.accessToken;
+  }
+
+  instanceUrl() {
+    return this.connection.instanceUrl;
   }
 
   async query(query: SalesforceQuery): Promise<Record[]> {

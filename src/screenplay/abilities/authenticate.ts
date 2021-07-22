@@ -14,7 +14,9 @@ export class Authenticate implements Ability {
   private constructor(
     private readonly personaName: string,
     private readonly personaManager: PersonaManager
-  ) {}
+  ) {
+    this.defaultCredentialsProvider(new LightCredentialsProvider());
+  }
 
   public credentials(): Credentials {
     return this.credentialsProvider.getCredentialsFor(this.persona());
@@ -53,7 +55,6 @@ export class Authenticate implements Ability {
 
   public static as(actor: UsesAbilities): Authenticate {
     const ability = actor.abilityTo(Authenticate);
-    ability.defaultCredentialsProvider(new LightCredentialsProvider());
     ability.reserveForActor(actor);
     return ability;
   }
