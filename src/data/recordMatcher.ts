@@ -1,5 +1,7 @@
-import { Record, SalesforceId } from "jsforce";
+import { Record as SalesforceRecord } from "jsforce";
 import { whereEq } from "ramda";
+
+type FieldValue = number | string | boolean;
 
 export interface Matcher {
   match(any): Boolean;
@@ -7,7 +9,7 @@ export interface Matcher {
 
 export interface IsRecord {
   hasId(): Boolean;
-  record(): Record;
+  record(): SalesforceRecord;
 }
 
 export interface IRecordShape extends Matcher, IsRecord {}
@@ -31,12 +33,12 @@ export class RecordShape implements IRecordShape {
     return Boolean(this.fields.Id);
   }
 
-  public match(record: Record): boolean {
+  public match(record: SalesforceRecord): boolean {
     const pattern = this.recordPattern();
     return whereEq(pattern, record);
   }
 
-  public record(): Record {
+  public record(): SalesforceRecord {
     if (!this.hasType()) {
       throw new Error("SObject type is missing from record attributes");
     }
@@ -63,5 +65,28 @@ export class RecordShape implements IRecordShape {
         type: this.type,
       };
     }
+  }
+}
+
+export class Record implements IsRecord {
+  static of(type: string): Record {
+    return new Record(type);
+  }
+
+  protected constructor(
+    protected readonly type: string,
+    protected readonly fields?: { [fieldName: string]: FieldValue }
+  ) {}
+
+  withFields(fields: { [fieldName: string]: FieldValue }): Record {
+    return new Record(this.type, fields);
+  }
+
+  hasId(): Boolean {
+    return Boolean(this.fields.Id);
+  }
+
+  record(): SalesforceRecord {
+    return { attributes: { type: this.type }, ...this.fields };
   }
 }

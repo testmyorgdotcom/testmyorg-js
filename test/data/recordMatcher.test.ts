@@ -1,13 +1,13 @@
 import { chai } from "../chai-extra";
-import { RecordShape, RecordShapeConfig } from "@/data";
-import { Record } from "jsforce";
+import { RecordShape, RecordShapeConfig, Record } from "@/data";
+import { Record as SalesforceRecord } from "jsforce";
 
 const { todo } = test;
 chai.should();
 
 const { expect } = chai;
 
-describe("Data manager", () => {
+describe("Record matcher", () => {
   it.each([
     [
       { type: "Account", Name: "test Acc" },
@@ -36,7 +36,7 @@ describe("Data manager", () => {
     ],
   ])(
     "matches record",
-    (config: RecordShapeConfig, record: Record, result: Boolean) => {
+    (config: RecordShapeConfig, record: SalesforceRecord, result: Boolean) => {
       const shape = new RecordShape(config);
       expect(
         shape.match(record),
@@ -62,7 +62,7 @@ describe("Data manager", () => {
     ],
   ])(
     "creates record from shape",
-    (config: RecordShapeConfig, record: Record) => {
+    (config: RecordShapeConfig, record: SalesforceRecord) => {
       new RecordShape(config).record().should.be.deep.equal(record);
     }
   );
@@ -71,5 +71,30 @@ describe("Data manager", () => {
     expect(() =>
       new RecordShape({ Id: "123", attributes: {} }).record()
     ).to.throw("SObject type is missing from record attributes");
+  });
+});
+
+describe("Record builder", () => {
+  it("creates record of specific type", () => {
+    const salesforceRecord = Record.of("Account");
+    salesforceRecord
+      .record()
+      .should.be.deep.equal(new RecordShape({ type: "Account" }).record());
+  });
+
+  it("creates record of specific type", () => {
+    const salesforceRecord = Record.of("Account").withFields({
+      Name: "TestMyOrg.com",
+      MaxNumber: 123,
+    });
+    salesforceRecord
+      .record()
+      .should.be.deep.equal(
+        new RecordShape({
+          type: "Account",
+          Name: "TestMyOrg.com",
+          MaxNumber: 123,
+        }).record()
+      );
   });
 });
