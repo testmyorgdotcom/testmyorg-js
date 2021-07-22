@@ -42,7 +42,8 @@ export class ConfigImpl implements Config {
         new Persona(
           personaDefn.name,
           personaDefn.username,
-          personaDefn.password
+          personaDefn.password,
+          personaDefn.token
         )
     );
   }

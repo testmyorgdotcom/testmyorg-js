@@ -4,6 +4,7 @@ import { Persona } from "../persona";
 export interface Credentials {
   username(): string;
   password(): string;
+  token(): string;
 }
 
 export interface CredentialsProvider {
@@ -18,17 +19,23 @@ export class LightCredentialsProvider implements CredentialsProvider {
   }
 
   getCredentialsFor(persona: Persona): Credentials {
-    return new BasicCredentials(persona.username, this.config.commonPass());
+    return new BasicCredentials(
+      persona.username,
+      this.config.commonPass(),
+      persona.token
+    );
   }
 }
 
 export class BasicCredentials implements Credentials {
   private readonly _username: string;
   private readonly _password: string;
+  private readonly _token: string;
 
-  constructor(username: string, password: string) {
+  constructor(username: string, password: string, token?: string) {
     this._username = username;
     this._password = password;
+    this._token = token;
   }
 
   username(): string {
@@ -37,5 +44,9 @@ export class BasicCredentials implements Credentials {
 
   password(): string {
     return this._password;
+  }
+
+  token(): string {
+    return this._token;
   }
 }
