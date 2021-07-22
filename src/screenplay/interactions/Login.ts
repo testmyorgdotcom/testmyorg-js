@@ -1,5 +1,6 @@
-import { Authenticate } from "../abilities";
+import { Authenticate, CallSalesforceApi } from "../abilities";
 import {
+  Actor,
   AnswersQuestions,
   Interaction,
   PerformsActivities,
@@ -19,12 +20,47 @@ import defaultConfig from "../../config";
 const { the } = Target;
 
 export class Login {
+  /**
+   * @description
+   *  Instructs actor to login via the regular login form. You can even use it for custom login forms, just make sure
+   *  the form has the same ids as standard Salesforce login form.
+   *
+   * @returns {Interaction}
+   */
   static viaForm() {
     return new LoginViaForm();
   }
 
+  /**
+   * @description
+   *  Instructs actor to login using URL parameters `un` and `pw`
+   *
+   * @returns {Interaction}
+   */
   static withCredentialsInUrl() {
     return new LoginWithCredentialsInUrl();
+  }
+
+  /**
+   * @description
+   *  Instructs actor to login frontdoor URL. User logs in via API first, then passes session id to frontdoor.jsp.
+   *  This is considered to be the fastest way, if your user can call API.
+   *
+   * @returns {Interaction}
+   */
+  static viaFrontdoorUrl() {
+    return new LoginViaFrontdoorUrl();
+  }
+
+  /**
+   * @description
+   *  Use this, if you don't care which way to go. We'll keep this with the fastest check available. Currently the
+   *  priority is: viaFrontdoorUrl is Acotr can {@link Call}.salesforceAPI(), withCredentialsInUrl otherwise.
+   *
+   * @returns {Interaction}
+   */
+  static quickly() {
+    return new QuickLogin();
   }
 }
 
@@ -49,7 +85,7 @@ class LoginViaForm extends Interaction {
   ): Promise<void> {
     const creds = getCredentials(actor);
 
-    await actor.attemptsTo(
+    return actor.attemptsTo(
       Navigate.to(defaultConfig.loginUrl()),
       Ensure.that(theLoginForm, isVisible()),
       Enter.theValue(creds.username()).into(loginPage.theUsernameField),
@@ -74,9 +110,40 @@ class LoginWithCredentialsInUrl extends Interaction {
   performAs(
     actor: UsesAbilities & AnswersQuestions & PerformsActivities
   ): Promise<void> {
-    // http://test.salesforce.com/login.jsp?un=test-zbdpfn5qeap0@example.com&pw=ld18xi3-z*0xZ
     const creds = getCredentials(actor);
     const url = `${defaultConfig.loginUrl()}/login.jsp?un=${creds.username()}&pw=${creds.password()}`;
-    return actor.attemptsTo(Navigate.to(url));
+    return actor.attemptsTo(
+      Navigate.to(url),
+      Ensure.that(theLoginForm, not(isVisible()))
+    );
+  }
+}
+
+class LoginViaFrontdoorUrl extends Interaction {
+  async performAs(
+    actor: UsesAbilities & AnswersQuestions & PerformsActivities
+  ): Promise<void> {
+    const callApiAbility = CallSalesforceApi.as(actor);
+    const { sessionId, instanceUrl } = await callApiAbility.login(
+      getCredentials(actor)
+    );
+    return actor.attemptsTo(
+      Navigate.to(`${instanceUrl}/secur/frontdoor.jsp?sid=${sessionId}`),
+      Ensure.that(theLoginForm, not(isVisible()))
+    );
+  }
+}
+
+class QuickLogin extends Interaction {
+  async performAs(actor: Actor): Promise<void> {
+    // hack for safe ability check
+    const canCallSalesforceAPI = Boolean(
+      (actor as any).findAbilityTo(CallSalesforceApi)
+    );
+    if (canCallSalesforceAPI) {
+      return actor.attemptsTo(new LoginViaFrontdoorUrl());
+    } else {
+      return actor.attemptsTo(new LoginWithCredentialsInUrl());
+    }
   }
 }
