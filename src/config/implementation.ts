@@ -38,7 +38,12 @@ export class ConfigImpl implements Config {
 
   public personas(): Persona[] {
     return defaultToEmptyList(this.cache.personas).map(
-      (personaDefn: any) => new Persona(personaDefn.name)
+      (personaDefn: any) =>
+        new Persona(
+          personaDefn.name,
+          personaDefn.username,
+          personaDefn.password
+        )
     );
   }
 }
