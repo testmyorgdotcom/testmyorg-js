@@ -1,10 +1,11 @@
 import { Credentials } from "../persona/auth";
-import { Connection, UserInfo } from "jsforce";
+import { Connection, RecordResult, UserInfo } from "jsforce";
 import defaultConfig from "../config";
 import { SalesforceQuery } from "../data/queryBuilder";
 import { Record } from "jsforce";
 
 export interface SalesforceConnection {
+  insert(records: Record[]): Promise<Record[]>;
   query(query: SalesforceQuery): Promise<Record[]>;
   login(creds: Credentials): Promise<UserInfo>;
   isAutheticated(): boolean;
@@ -18,6 +19,14 @@ export class SalesforceConnectionImpl implements SalesforceConnection {
 
   constructor(loginUrl: string = defaultConfig.loginUrl()) {
     this.connection = new Connection({ loginUrl });
+  }
+
+  async insert(records: Record[]): Promise<RecordResult[]> {
+    if (records.length) {
+      const type = records[0].attributes.type;
+      return this.connection.insert(type, records) as Promise<RecordResult[]>;
+    }
+    return [];
   }
 
   isAutheticated(): boolean {

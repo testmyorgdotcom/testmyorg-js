@@ -1,7 +1,7 @@
 import { Record as SalesforceRecord } from "jsforce";
 import { whereEq } from "ramda";
 
-type FieldValue = number | string | boolean;
+export type FieldValue = number | string | boolean;
 
 export interface Matcher {
   match(any): Boolean;
@@ -65,28 +65,5 @@ export class RecordShape implements IRecordShape {
         type: this.type,
       };
     }
-  }
-}
-
-export class Record implements IsRecord {
-  static of(type: string): Record {
-    return new Record(type);
-  }
-
-  protected constructor(
-    protected readonly type: string,
-    protected readonly fields?: { [fieldName: string]: FieldValue }
-  ) {}
-
-  withFields(fields: { [fieldName: string]: FieldValue }): Record {
-    return new Record(this.type, fields);
-  }
-
-  hasId(): Boolean {
-    return Boolean(this.fields.Id);
-  }
-
-  record(): SalesforceRecord {
-    return { attributes: { type: this.type }, ...this.fields };
   }
 }

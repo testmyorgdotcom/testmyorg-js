@@ -1,5 +1,11 @@
 import { chai } from "../chai-extra";
-import { RecordShape, RecordShapeConfig, Record } from "@/data";
+import {
+  RecordShape,
+  RecordShapeConfig,
+  record,
+  account,
+  contact,
+} from "@/data";
 import { Record as SalesforceRecord } from "jsforce";
 
 const { todo } = test;
@@ -76,25 +82,30 @@ describe("Record matcher", () => {
 
 describe("Record builder", () => {
   it("creates record of specific type", () => {
-    const salesforceRecord = Record.of("Account");
-    salesforceRecord
-      .record()
-      .should.be.deep.equal(new RecordShape({ type: "Account" }).record());
+    const salesforceRecord = record().like({
+      type: "Account",
+      Name: "Org name",
+    });
+    salesforceRecord.should.be.deep.equal(
+      new RecordShape({ type: "Account", Name: "Org name" })
+    );
   });
 
-  it("creates record of specific type", () => {
-    const salesforceRecord = Record.of("Account").withFields({
-      Name: "TestMyOrg.com",
-      MaxNumber: 123,
-    });
+  it("creates account with fields", () => {
+    const salesforceRecord = account().like({ Name: "Org name" });
     salesforceRecord
       .record()
       .should.be.deep.equal(
-        new RecordShape({
-          type: "Account",
-          Name: "TestMyOrg.com",
-          MaxNumber: 123,
-        }).record()
+        new RecordShape({ type: "Account", Name: "Org name" }).record()
+      );
+  });
+
+  it("creates contact with fields", () => {
+    const salesforceRecord = contact().like({ Name: "Org name" });
+    salesforceRecord
+      .record()
+      .should.be.deep.equal(
+        new RecordShape({ type: "Contact", Name: "Org name" }).record()
       );
   });
 });

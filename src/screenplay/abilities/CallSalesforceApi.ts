@@ -43,7 +43,11 @@ export class CallSalesforceApi implements Ability {
     };
   }
 
-  async query(query: SalesforceQuery): Promise<Record[]> {
+  query(query: SalesforceQuery): Promise<Record[]> {
     return this.connection.query(query);
+  }
+
+  insert(record: Record) {
+    return this.connection.insert([record]);
   }
 }
