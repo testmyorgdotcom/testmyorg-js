@@ -4,7 +4,7 @@ import {
   Interaction,
   UsesAbilities,
 } from "@serenity-js/core";
-import { CallSalesforceApi } from "../abilities";
+import { CallSalesforceApi } from "../abilities/CallSalesforceApi";
 
 export class Create {
   static record() {

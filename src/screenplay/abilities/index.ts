@@ -1,2 +1,2 @@
 export * from "./authenticate";
-export * from "./CallSalesforceApi";
+export { Call } from "./CallSalesforceApi";

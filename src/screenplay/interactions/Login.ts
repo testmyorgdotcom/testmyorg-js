@@ -1,4 +1,5 @@
-import { Authenticate, CallSalesforceApi } from "../abilities";
+import { Authenticate } from "../abilities";
+import { CallSalesforceApi } from "../abilities/CallSalesforceApi";
 import {
   Actor,
   AnswersQuestions,
