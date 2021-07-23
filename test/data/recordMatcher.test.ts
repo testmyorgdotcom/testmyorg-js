@@ -1,12 +1,7 @@
 import { chai } from "../chai-extra";
-import {
-  RecordShape,
-  RecordShapeConfig,
-  record,
-  account,
-  contact,
-} from "@/data";
+import { RecordShape, RecordShapeConfig } from "@/data";
 import { Record as SalesforceRecord } from "jsforce";
+import { stringify } from "@serenity-js/core/lib/io";
 
 const { todo } = test;
 chai.should();
@@ -73,39 +68,29 @@ describe("Record matcher", () => {
     }
   );
 
+  it.each([
+    {
+      shapeConfig: { type: "Account", Name: "test Acc" },
+      description: `Account record with fields: ${JSON.stringify({
+        Name: "test Acc",
+      })}`,
+    },
+  ])(
+    "describes shape with toString()",
+    ({
+      shapeConfig,
+      description,
+    }: {
+      shapeConfig: RecordShapeConfig;
+      description: string;
+    }) => {
+      new RecordShape(shapeConfig).toString().should.be.deep.equal(description);
+    }
+  );
+
   it("fails record generation if type is missing", () => {
     expect(() =>
       new RecordShape({ Id: "123", attributes: {} }).record()
     ).to.throw("SObject type is missing from record attributes");
-  });
-});
-
-describe("Record builder", () => {
-  it("creates record of specific type", () => {
-    const salesforceRecord = record().like({
-      type: "Account",
-      Name: "Org name",
-    });
-    salesforceRecord.should.be.deep.equal(
-      new RecordShape({ type: "Account", Name: "Org name" })
-    );
-  });
-
-  it("creates account with fields", () => {
-    const salesforceRecord = account().like({ Name: "Org name" });
-    salesforceRecord
-      .record()
-      .should.be.deep.equal(
-        new RecordShape({ type: "Account", Name: "Org name" }).record()
-      );
-  });
-
-  it("creates contact with fields", () => {
-    const salesforceRecord = contact().like({ Name: "Org name" });
-    salesforceRecord
-      .record()
-      .should.be.deep.equal(
-        new RecordShape({ type: "Contact", Name: "Org name" }).record()
-      );
   });
 });

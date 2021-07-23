@@ -45,6 +45,10 @@ export class RecordShape implements IRecordShape {
     return this.recordPattern();
   }
 
+  public toString() {
+    return `${this.type} record with fields: ${JSON.stringify(this.fields)}`;
+  }
+
   private hasType() {
     return Boolean(this.type);
   }
