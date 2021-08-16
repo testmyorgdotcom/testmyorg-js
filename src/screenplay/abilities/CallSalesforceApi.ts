@@ -1,4 +1,4 @@
-import { SalesforceQuery } from "../../data/queryBuilder";
+import { Queryable } from "../../data/queryBuilder";
 import { Ability, Actor, UsesAbilities } from "@serenity-js/core";
 import {
   SalesforceConnection,
@@ -43,8 +43,8 @@ export class CallSalesforceApi implements Ability {
     };
   }
 
-  query(query: SalesforceQuery): Promise<Record[]> {
-    return this.connection.query(query);
+  query(query: Queryable): Promise<Record[]> {
+    return this.connection.query(query.toQuery());
   }
 
   insert(record: Record) {
