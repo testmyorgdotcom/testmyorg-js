@@ -1,7 +1,7 @@
 import { chai } from "../chai-extra";
 import { RecordShape, RecordShapeConfig } from "@/data";
 import { Record as SalesforceRecord } from "jsforce";
-import { stringify } from "@serenity-js/core/lib/io";
+import { select } from "@/data/queryBuilder";
 
 const { todo } = test;
 chai.should();
@@ -92,5 +92,22 @@ describe("Record matcher", () => {
     expect(() =>
       new RecordShape({ Id: "123", attributes: {} }).record()
     ).to.throw("SObject type is missing from record attributes");
+  });
+
+  it("generates query", () => {
+    const shape = new RecordShape({
+      type: "Account",
+      Name: "test Acc",
+      Contact: "213",
+    });
+
+    expect(shape.toQuery()).to.exist;
+
+    expect(shape.toQuery().toString()).to.be.equal(
+      select("Name", "Contact")
+        .from("Account")
+        .where("Name = 'test Acc' AND Contact = '213'")
+        .toString()
+    );
   });
 });

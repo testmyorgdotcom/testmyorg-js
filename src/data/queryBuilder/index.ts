@@ -8,6 +8,10 @@ export interface QueryBuilder {
   from(objectName: string): SalesforceQuery;
 }
 
+export interface Queryable {
+  toQuery(): SalesforceQuery;
+}
+
 export interface SalesforceQuery {
   fields(fields: string[]): SalesforceQuery;
   thatMatches(condition: Conditionable): SalesforceQuery;

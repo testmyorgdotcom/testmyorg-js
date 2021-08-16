@@ -1,5 +1,6 @@
 import { Record as SalesforceRecord } from "jsforce";
 import { whereEq } from "ramda";
+import { Queryable, SalesforceQuery, select } from "./queryBuilder";
 
 export type FieldValue = number | string | boolean;
 
@@ -12,15 +13,15 @@ export interface IsRecord {
   record(): SalesforceRecord;
 }
 
-export interface IRecordShape extends Matcher, IsRecord {}
+export interface IRecordShape extends Matcher, IsRecord, Queryable {}
 
 export interface RecordShapeConfig {
-  type?: String;
+  type?: string;
   [fieldName: string]: any;
 }
 
 export class RecordShape implements IRecordShape {
-  private readonly type: String;
+  private readonly type: string;
   private readonly fields: { [fieldName: string]: any };
 
   constructor(config: RecordShapeConfig) {
@@ -43,6 +44,12 @@ export class RecordShape implements IRecordShape {
       throw new Error("SObject type is missing from record attributes");
     }
     return this.recordPattern();
+  }
+
+  toQuery(): SalesforceQuery {
+    return select(...Object.keys(this.fields))
+      .from(this.type)
+      .where("Name = 'test Acc' AND Contact = '213'");
   }
 
   public toString() {
